@@ -16,6 +16,11 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self) -> None:
         self.browser.quit()
 
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_element_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
     def test_can_start_a_list_and_retrieve_it_later(self):
         self.browser.get("http://localhost:8000")
 
@@ -33,18 +38,14 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys('购买假蝇')
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
+        self.check_for_row_in_list_table('1: 购买假蝇')
 
         inputbox.clear()
         inputbox.send_keys('使用孔雀羽毛做假蝇')
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
-
-        # 查看待办列表中有：「1: 购买假蝇」
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_element_by_tag_name('tr')
-        row_list = [row for row in rows]
-        self.assertIn('1: 购买假蝇', row_list)
-        self.assertIn('2: 使用孔雀羽毛做假蝇', row_list)
+        self.check_for_row_in_list_table('1: 购买假蝇')
+        self.check_for_row_in_list_table('2: 使用孔雀羽毛做假蝇')
 
         self.fail('Finish the test!')
 
