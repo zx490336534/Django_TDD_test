@@ -15,5 +15,5 @@ class SmokeTest(TestCase):
         response = home_page(request)
         html = response.content.decode()
         self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<title>To-Do lists</title>', html)
+        self.assertIn('<title>待办事项</title>', html)
         self.assertTrue(html.endswith('</html>'))

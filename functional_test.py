@@ -19,7 +19,7 @@ class NewVisitorTest(unittest.TestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         self.browser.get("http://localhost:8000")
 
-        self.assertIn('To-Do', self.browser.title)
+        self.assertIn('待办事项', self.browser.title)
 
         # 存在h1标题「待办事项列表」
         header_text = self.browser.find_element_by_tag_name('h1').text
