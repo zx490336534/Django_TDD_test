@@ -3,8 +3,10 @@
 # @Author  : zhongxin
 # @Email   : 490336534@qq.com
 # @File    : functional_test.py
+import time
 import unittest
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
 
 class NewVisitorTest(unittest.TestCase):
@@ -18,6 +20,27 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.get("http://localhost:8000")
 
         self.assertIn('To-Do', self.browser.title)
+
+        # 存在h1标题「待办事项列表」
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('待办事项列表', header_text)
+
+        # 存在一个输入框，默认值是「请输入待办事项」
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertEqual(inputbox.get_attribute('placeholder'), '请输入待办事项')
+
+        # 输入一个待办事项：「购买假蝇」 后等待1秒
+        inputbox.send_keys('购买假蝇')
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+
+        # 查看待办列表中有：「1: 购买假蝇」
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_element_by_tag_name('tr')
+        self.assertTrue(
+            any(row.text == '1: 购买假蝇' for row in rows)
+        )
+
         self.fail('Finish the test!')
 
 
