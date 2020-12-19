@@ -12,8 +12,11 @@ class SmokeTest(TestCase):
         self.assertTemplateUsed(response, 'home.html')
 
     def test_can_save_a_POST_request(self):
-        response = self.client.post('/', data={'item_text': "一项事项"})
-        self.assertIn('一项事项', response.content.decode())
+        response = self.client.post('/', data={'item_text': "一项新事项"})
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, "一项新事项")
+        self.assertIn("一项新事项", response.content.decode())
         self.assertTemplateUsed(response, 'home.html')
 
 
@@ -32,5 +35,5 @@ class ItemModelTest(TestCase):
 
         first_saved_item = saved_items[0]
         second_saved_item = saved_items[1]
-        self.assertEqual(first_saved_item, '第一条待办事项')
-        self.assertEqual(second_saved_item, '第二条待办事项')
+        self.assertEqual(first_saved_item.text, '第一条待办事项')
+        self.assertEqual(second_saved_item.text, '第二条待办事项')
