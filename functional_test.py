@@ -34,12 +34,17 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
 
+        inputbox.clear()
+        inputbox.send_keys('使用孔雀羽毛做假蝇')
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+
         # 查看待办列表中有：「1: 购买假蝇」
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_element_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: 购买假蝇' for row in rows)
-        )
+        row_list = [row for row in rows]
+        self.assertIn('1: 购买假蝇', row_list)
+        self.assertIn('2: 使用孔雀羽毛做假蝇', row_list)
 
         self.fail('Finish the test!')
 
