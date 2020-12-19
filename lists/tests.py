@@ -1,7 +1,4 @@
-from django.http import HttpRequest
 from django.test import TestCase
-from django.urls import resolve
-from lists.views import home_page
 from lists.models import Item
 
 
@@ -37,3 +34,9 @@ class ItemModelTest(TestCase):
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.text, '第一条待办事项')
         self.assertEqual(second_saved_item.text, '第二条待办事项')
+
+
+class HomePageTest(TestCase):
+    def test_only_saves_items_when_necessart(self):
+        self.client.get('/')
+        self.assertEqual(Item.objects.count(), 0)
