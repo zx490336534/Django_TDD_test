@@ -11,8 +11,7 @@ class SmokeTest(TestCase):
         self.assertEqual(found.func, home_page)
 
     def test_home_page_returns_correct_html(self):
-        request = HttpRequest()
-        response = home_page(request)
+        response = self.client.get('/')
         html = response.content.decode()
         self.assertTrue(html.startswith('<html>'))
         self.assertIn('<title>待办事项</title>', html)
