@@ -14,8 +14,10 @@ MAX_WAIT = 10
 
 
 class NewVisitorTest(LiveServerTestCase):
+    CHROME_DRIVER = "./tools/chromedriver"
+
     def setUp(self) -> None:
-        self.browser = webdriver.Chrome(executable_path="./tools/chromedriver")
+        self.browser = webdriver.Chrome(executable_path=self.CHROME_DRIVER)
 
     def tearDown(self) -> None:
         self.browser.quit()
@@ -46,17 +48,48 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(inputbox.get_attribute('placeholder'), '请输入待办事项')
 
-        # 输入一个待办事项：「购买假蝇」 后等待1秒
-        inputbox.send_keys('购买假蝇')
+        # 输入一个待办事项：「购买羽毛」 后等待1秒
+        inputbox.send_keys('购买羽毛')
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
-        self.wait_for_row_in_list_table('1: 购买假蝇')
+        self.wait_for_row_in_list_table('1: 购买羽毛')
 
         inputbox = self.browser.find_element_by_id('id_new_item')
-        inputbox.send_keys('使用孔雀羽毛做假蝇')
+        inputbox.send_keys('使用孔雀羽毛做一只鸟')
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
-        self.wait_for_row_in_list_table('1: 购买假蝇')
-        self.wait_for_row_in_list_table('2: 使用孔雀羽毛做假蝇')
+        self.wait_for_row_in_list_table('1: 购买羽毛')
+        self.wait_for_row_in_list_table('2: 使用孔雀羽毛做一只鸟')
 
         self.fail('Finish the test!')
+
+    def test_multiple_users_can_start_lists_at_different_urls(self):
+        self.browser.get(self.live_server_url)
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('购买羽毛')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: 购买羽毛')
+
+        edith_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url, '/lists/.+')
+
+        self.browser.quit()
+
+        self.browser = webdriver.Chrome(executable_path=self.CHROME_DRIVER)
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('购买羽毛', page_text)
+        self.assertNotIn('做一只鸟', page_text)
+
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('购买牛奶')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: 购买牛奶')
+
+        francis_list_url = self.browser.current_url
+        self.assertRegex(francis_list_url, '/lists/.+')
+        self.assertNotEqual(francis_list_url, edith_list_url)
+
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('购买羽毛', page_text)
+        self.assertIn('购买牛奶', page_text)
