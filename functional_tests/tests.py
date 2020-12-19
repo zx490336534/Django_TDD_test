@@ -3,6 +3,7 @@
 # @Author  : zhongxin
 # @Email   : 490336534@qq.com
 # @File    : tests.py
+# 运行功能测试:python manage.py test functional_tests
 import time
 from django.test import LiveServerTestCase
 from selenium import webdriver

@@ -1,3 +1,4 @@
+# 运行单元测试:python manage.py test lists
 from django.test import TestCase
 from lists.models import Item
 
