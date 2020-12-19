@@ -4,12 +4,12 @@
 # @Email   : 490336534@qq.com
 # @File    : tests.py
 import time
-import unittest
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self) -> None:
         self.browser = webdriver.Chrome(executable_path="./tools/chromedriver")
 
@@ -22,7 +22,7 @@ class NewVisitorTest(unittest.TestCase):
         self.assertIn(row_text, [row.text for row in rows])
 
     def test_can_start_a_list_and_retrieve_it_later(self):
-        self.browser.get("http://localhost:8000")
+        self.browser.get(self.live_server_url)
 
         self.assertIn('待办事项', self.browser.title)
 
@@ -40,7 +40,7 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(1)
         self.check_for_row_in_list_table('1: 购买假蝇')
 
-        inputbox.clear()
+        inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('使用孔雀羽毛做假蝇')
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
@@ -48,7 +48,3 @@ class NewVisitorTest(unittest.TestCase):
         self.check_for_row_in_list_table('2: 使用孔雀羽毛做假蝇')
 
         self.fail('Finish the test!')
-
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
