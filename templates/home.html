@@ -4,8 +4,14 @@
 </head>
     <body>
         <h1>你的待办事项列表</h1>
-        <input id="id_new_item" placeholder="请输入待办事项"/>
+        <form method="POST">
+            <input id="id_new_item" placeholder="请输入待办事项"/>
+            {% csrf_token %}
+        </form>
         <table id="id_list_table">
+            <tr>
+                <td>{{ new_item_text }}</td>
+            </tr>
         </table>
     </body>
 </html>

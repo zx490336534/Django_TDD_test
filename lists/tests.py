@@ -10,9 +10,7 @@ class SmokeTest(TestCase):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
 
-    def test_home_page_returns_correct_html(self):
-        response = self.client.get('/')
-        html = response.content.decode()
-        self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<title>待办事项</title>', html)
-        self.assertTrue(html.endswith('</html>'))
+    def test_can_save_a_POST_request(self):
+        response = self.client.post('/', data={'item_text': "一项事项"})
+        self.assertIn('一项事项', response.content.decode())
+        self.assertTemplateUsed(response, 'home.html')
