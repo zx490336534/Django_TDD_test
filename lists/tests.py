@@ -3,20 +3,6 @@ from django.test import TestCase
 from lists.models import Item
 
 
-class SmokeTest(TestCase):
-
-    def test_uses_home_template(self):
-        response = self.client.get('/')
-        self.assertTemplateUsed(response, 'home.html')
-
-    def test_can_save_a_POST_request(self):
-        response = self.client.post('/', data={'item_text': "一项新事项"})
-        self.assertEqual(Item.objects.count(), 1)
-        print(Item.objects.all())
-        new_item = Item.objects.first()
-        self.assertEqual(new_item.text, "一项新事项")
-
-
 class ItemModelTest(TestCase):
     def test_saveing_and_retrieving_items(self):
         first_item = Item()
@@ -37,9 +23,9 @@ class ItemModelTest(TestCase):
 
 
 class HomePageTest(TestCase):
-    def test_only_saves_items_when_necessart(self):
-        self.client.get('/')
-        self.assertEqual(Item.objects.count(), 0)
+    def test_uses_home_template(self):
+        response = self.client.get('/')
+        self.assertTemplateUsed(response, 'home.html')
 
 
 class ListViewTest(TestCase):
