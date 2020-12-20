@@ -66,4 +66,5 @@ class NewListTest(TestCase):
 
     def test_refirects_after_POST(self):
         response = self.client.post('/lists/new', data={'item_text': '一个新待办事项列表'})
-        self.assertRedirects(response, '/lists/the-only-list-in-the-world/')
+        new_list = List.objects.first()
+        self.assertRedirects(response, f'/lists/{new_list.id}/')
