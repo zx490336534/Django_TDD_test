@@ -1,0 +1,12 @@
+<html>
+<head>
+    <title>新建待办事项列表</title>
+</head>
+    <body>
+        <h1>新建一个待办事项列表</h1>
+        <form method="POST">
+            <input id="item_text" placeholder="请输入待办事项" name="id_new_item"/>
+            {% csrf_token %}
+        </form>
+    </body>
+</html>
