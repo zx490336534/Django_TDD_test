@@ -43,17 +43,6 @@ class HomePageTest(TestCase):
         self.client.get('/')
         self.assertEqual(Item.objects.count(), 0)
 
-    def test_can_save_a_POST_request(self):
-        response = self.client.post('/', data={'item_text': '一个新待办事项'})
-        self.assertEqual(Item.objects.count(), 1)
-        new_item = Item.objects.first()
-        self.assertEqual(new_item.text, '一个新待办事项')
-
-    def test_refirects_after_POST(self):
-        response = self.client.post('/', data={'item_text': '一个新待办事项1'})
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/lists/the-only-list-in-the-world/')
-
 
 class ListViewTest(TestCase):
     def test_uses_list_template(self):
@@ -66,3 +55,15 @@ class ListViewTest(TestCase):
         response = self.client.get('/lists/the-only-list-in-the-world/')
         self.assertContains(response, 'itemey 1')
         self.assertContains(response, 'itemey 2')
+
+
+class NewListTest(TestCase):
+    def test_can_save_a_POST_request(self):
+        response = self.client.post('/lists/new', data={'item_text': '一个新待办事项列表'})
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, '一个新待办事项列表')
+
+    def test_refirects_after_POST(self):
+        response = self.client.post('/lists/new', data={'item_text': '一个新待办事项列表'})
+        self.assertRedirects(response, '/lists/the-only-list-in-the-world/')
