@@ -15,8 +15,6 @@ class SmokeTest(TestCase):
         print(Item.objects.all())
         new_item = Item.objects.first()
         self.assertEqual(new_item.text, "一项新事项")
-        self.assertIn("一项新事项", response.content.decode())
-        self.assertTemplateUsed(response, 'home.html')
 
 
 class ItemModelTest(TestCase):
@@ -46,7 +44,7 @@ class HomePageTest(TestCase):
 
 class ListViewTest(TestCase):
     def test_uses_list_template(self):
-        response = self.client.get('lists/the-only-list-in-the-world/')
+        response = self.client.get('/lists/the-only-list-in-the-world/')
         self.assertTemplateUsed(response, 'list.html')
 
     def test_displays_all_items(self):
