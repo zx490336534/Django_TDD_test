@@ -42,10 +42,10 @@ class NewVisitorTest(LiveServerTestCase):
 
         # 存在h1标题「待办事项列表」
         header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('待办事项列表', header_text)
+        self.assertIn('待办事项', header_text)
 
         # 存在一个输入框，默认值是「请输入待办事项」
-        inputbox = self.browser.find_element_by_id('item_text')
+        inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(inputbox.get_attribute('placeholder'), '请输入待办事项')
 
         # 输入一个待办事项：「购买羽毛」 后等待1秒
@@ -65,7 +65,7 @@ class NewVisitorTest(LiveServerTestCase):
 
     def test_multiple_users_can_start_lists_at_different_urls(self):
         self.browser.get(self.live_server_url)
-        inputbox = self.browser.find_element_by_id('item_text')
+        inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('购买羽毛')
         inputbox.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table('1: 购买羽毛')
@@ -81,7 +81,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertNotIn('购买羽毛', page_text)
         self.assertNotIn('做一只鸟', page_text)
 
-        inputbox = self.browser.find_element_by_id('item_text')
+        inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('购买牛奶')
         inputbox.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table('1: 购买牛奶')
@@ -97,7 +97,7 @@ class NewVisitorTest(LiveServerTestCase):
     def test_layout_and_styling(self):
         self.browser.get(self.live_server_url)
         self.browser.set_window_size(1024, 768)
-        inputbox = self.browser.find_element_by_id('item_text')
+        inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width'] / 2,
             512,
