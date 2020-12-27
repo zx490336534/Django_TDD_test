@@ -5,6 +5,8 @@
 # @File    : tests.py
 # 运行功能测试:python manage.py test functional_tests
 import time
+
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
@@ -13,7 +15,7 @@ from selenium.webdriver.common.keys import Keys
 MAX_WAIT = 10
 
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
     CHROME_DRIVER = "./tools/chromedriver"
 
     def setUp(self) -> None:
