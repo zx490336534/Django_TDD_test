@@ -4,6 +4,7 @@
 # @Email   : 490336534@qq.com
 # @File    : tests.py
 # 运行功能测试:python manage.py test functional_tests
+import os
 import time
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -20,6 +21,9 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self) -> None:
         self.browser = webdriver.Chrome(executable_path=self.CHROME_DRIVER)
+        staging_server = os.environ.get('STAGING_SERVER')
+        if staging_server:
+            self.live_server_url = f'http://{staging_server}'
 
     def tearDown(self) -> None:
         self.browser.quit()
