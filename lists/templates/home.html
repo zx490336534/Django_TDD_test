@@ -5,7 +5,9 @@
     <body>
         <h1>新建一个待办事项列表</h1>
         <form method="POST" action="/lists/new">
-            <input id="item_text" placeholder="请输入待办事项" name="item_text"/>
+            <p style="text-align: center">
+                <input id="item_text" placeholder="请输入待办事项" name="item_text"/>
+            </p>
             {% csrf_token %}
         </form>
     </body>
