@@ -9,7 +9,7 @@ from logging.handlers import WatchedFileHandler
 import os
 import multiprocessing
 
-bind = '123.56.13.233:8080'  # 绑定ip和端口号
+bind = '0.0.0.0:8080'  # 绑定ip和端口号
 backlog = 512  # 监听队列
 chdir = '/home/zx/Django_TDD_test'  # gunicorn要切换到的目的工作目录
 timeout = 30  # 超时
