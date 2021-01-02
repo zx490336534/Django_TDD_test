@@ -1,0 +1,1 @@
+gunicorn superlists.wsgi -c gunicorn_config.py
