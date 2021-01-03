@@ -4,42 +4,10 @@
 # @Email   : 490336534@qq.com
 # @File    : tests.py
 # 运行功能测试:python manage.py test functional_tests
-import os
 import time
-from unittest import skip
-
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from .base import FunctionslTest
 from selenium import webdriver
-from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
-
-MAX_WAIT = 10
-
-
-class FunctionslTest(StaticLiveServerTestCase):
-    CHROME_DRIVER = "./tools/chromedriver"
-
-    def setUp(self) -> None:
-        self.browser = webdriver.Chrome(executable_path=self.CHROME_DRIVER)
-        staging_server = os.environ.get('STAGING_SERVER')
-        if staging_server:
-            self.live_server_url = f'http://{staging_server}'
-
-    def tearDown(self) -> None:
-        self.browser.quit()
-
-    def wait_for_row_in_list_table(self, row_text):
-        t0 = time.time()
-        while True:
-            try:
-                table = self.browser.find_element_by_id('id_list_table')
-                rows = table.find_elements_by_tag_name('tr')
-                self.assertIn(row_text, [row.text for row in rows])
-                return
-            except (AssertionError, WebDriverException) as e:
-                if time.time() - t0 > MAX_WAIT:
-                    raise e
-                time.sleep(0.1)
 
 
 class NewVisitorTest(FunctionslTest):
@@ -102,22 +70,3 @@ class NewVisitorTest(FunctionslTest):
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('购买羽毛', page_text)
         self.assertIn('购买牛奶', page_text)
-
-
-class LayoutAndStylingTest(FunctionslTest):
-
-    def test_layout_and_styling(self):
-        self.browser.get(self.live_server_url)
-        self.browser.set_window_size(1024, 768)
-        inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual(
-            inputbox.location['x'] + inputbox.size['width'] / 2,
-            512,
-            delta=10
-        )
-
-
-class ItemValidationTest(FunctionslTest):
-    @skip
-    def test_cannot_add_empty_list_items(self):
-        self.fail('write me!')
