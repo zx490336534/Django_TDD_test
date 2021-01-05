@@ -17,7 +17,7 @@ def view_list(request, list_id):
             item = Item.objects.create(text=request.POST['item_text'], list=list_)
             item.full_clean()
             item.save()
-            return redirect(f'/lists/{list_.id}/')
+            return redirect(list_)
         except ValidationError:
             error = '你不能创建一个空待办事项'
     return render(request, 'list.html', {'list': list_, 'error': error})
@@ -34,4 +34,4 @@ def new_list(request):
         # escape 防止出现转义问题
         error = escape('你不能创建一个空待办事项')
         return render(request, 'home.html', {"error": error})
-    return redirect(f'/lists/{list_.id}/')
+    return redirect(list_)  # 等价于 return redirect('view_list', list_.id)
