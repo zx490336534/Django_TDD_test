@@ -1,5 +1,7 @@
 # 运行单元测试:python manage.py test lists
 from django.test import TestCase
+from django.utils.html import escape
+
 from lists.models import Item, List
 
 
@@ -53,6 +55,17 @@ class ListViewTest(TestCase):
             }
         )
         self.assertRedirects(response, f'/lists/{correct_list.id}/')
+
+    def test_validation_errors_end_up_on_lists_page(self):
+        list_ = List.objects.create()
+        response = self.client.post(
+            f'/lists/{list_.id}/',
+            data={'item_text': ''}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'list.html')
+        expected_error = escape("你不能创建一个空待办事项")
+        self.assertContains(response, expected_error)
 
 
 class NewListTest(TestCase):
