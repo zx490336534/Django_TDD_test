@@ -22,7 +22,7 @@ class NewVisitorTest(FunctionslTest):
         self.assertIn('待办事项', header_text)
 
         # 存在一个输入框，默认值是「请输入待办事项」
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         self.assertEqual(inputbox.get_attribute('placeholder'), '请输入待办事项')
 
         # 输入一个待办事项：「购买羽毛」 后等待1秒
@@ -31,7 +31,7 @@ class NewVisitorTest(FunctionslTest):
         time.sleep(1)
         self.wait_for_row_in_list_table('1: 购买羽毛')
 
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('使用孔雀羽毛做一只鸟')
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
@@ -42,7 +42,7 @@ class NewVisitorTest(FunctionslTest):
 
     def test_multiple_users_can_start_lists_at_different_urls(self):
         self.browser.get(self.live_server_url)
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('购买羽毛')
         inputbox.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table('1: 购买羽毛')
@@ -58,7 +58,7 @@ class NewVisitorTest(FunctionslTest):
         self.assertNotIn('购买羽毛', page_text)
         self.assertNotIn('做一只鸟', page_text)
 
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('购买牛奶')
         inputbox.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table('1: 购买牛奶')

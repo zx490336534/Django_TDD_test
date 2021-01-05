@@ -14,25 +14,25 @@ from .base import FunctionslTest
 class ItemValidationTest(FunctionslTest):
     def test_cannot_add_empty_list_items(self):
         self.browser.get(self.live_server_url)
-        self.browser.find_element_by_id('id_new_item').send_keys(Keys.ENTER)
+        self.get_item_input_box().send_keys(Keys.ENTER)
 
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('.has-error').text,
             "你不能创建一个空待办事项"
         ))
 
-        self.browser.find_element_by_id('id_new_item').send_keys('购买牛奶')
-        self.browser.find_element_by_id('id_new_item').send_keys(Keys.ENTER)
+        self.get_item_input_box().send_keys('购买牛奶')
+        self.get_item_input_box().send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table("1: 购买牛奶")
 
-        self.browser.find_element_by_id('id_new_item').send_keys(Keys.ENTER)
+        self.get_item_input_box().send_keys(Keys.ENTER)
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('.has-error').text,
             "你不能创建一个空待办事项"
         ))
 
-        self.browser.find_element_by_id('id_new_item').send_keys('制作奶茶')
-        self.browser.find_element_by_id('id_new_item').send_keys(Keys.ENTER)
+        self.get_item_input_box().send_keys('制作奶茶')
+        self.get_item_input_box().send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table("1: 购买牛奶")
         self.wait_for_row_in_list_table("2: 制作奶茶")
 
