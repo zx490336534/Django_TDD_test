@@ -11,3 +11,10 @@ class List(models.Model):
 class Item(models.Model):
     text = models.TextField(default='')
     list = models.ForeignKey(List, default=None, on_delete=CASCADE)
+
+    class Meta:
+        ordering = ('id',)
+        unique_together = ('list', 'text')  # 清单中的待办事项必须是唯一的
+
+    def __str__(self):
+        return self.text
