@@ -5,6 +5,18 @@ from django.utils.html import escape
 from lists.forms import ItemForm, EMPTY_ITEM_ERROR, DUPLICATE_ITEM_ERROR, ExistingListItemForm
 from lists.models import Item, List
 
+"""
+如何测试视图
+1. 使用Django测试客户端
+2. 检查使用的模版，然后在模版的上下文中检查各个待办事项
+3. 检查每个对象都是希望得到的，或者查询集合中包含正确的待办事项
+4. 检查表单使用正确的类
+5. 检查测试模版逻辑：每个for和if语句都要做最简单的测试
+6. 对于处理POST请求的视图，确保有效和无效两种情况都要测试
+7. 健全性检查（可选），检查是否渲染指定的表单，而且是否显示错误消息
+
+"""
+
 
 class HomePageTest(TestCase):
     def test_uses_home_template(self):
@@ -19,8 +31,8 @@ class HomePageTest(TestCase):
 class ListViewTest(TestCase):
     def test_uses_list_template(self):
         list_ = List.objects.create()
-        response = self.client.get(f'/lists/{list_.id}/')
-        self.assertTemplateUsed(response, 'list.html')
+        response = self.client.get(f'/lists/{list_.id}/')  # 1
+        self.assertTemplateUsed(response, 'list.html')  # 2
 
     def test_display_only_items_for_that_list(self):
         correct_list = List.objects.create()
@@ -30,7 +42,7 @@ class ListViewTest(TestCase):
         Item.objects.create(text='other list item 1', list=other_list)
         Item.objects.create(text='other list item 2', list=other_list)
         response = self.client.get(f'/lists/{correct_list.id}/')
-        self.assertContains(response, 'itemey 1')
+        self.assertContains(response, 'itemey 1')  # 5
         self.assertContains(response, 'itemey 2')
         self.assertNotContains(response, 'other list item 1')
         self.assertNotContains(response, 'other list item 2')
@@ -64,7 +76,7 @@ class ListViewTest(TestCase):
     def test_displays_item_form(self):
         list_ = List.objects.create()
         response = self.client.get(f'/lists/{list_.id}/')
-        self.assertIsInstance(response.context['form'], ExistingListItemForm)
+        self.assertIsInstance(response.context['form'], ExistingListItemForm)  # 4
         self.assertContains(response, 'name="text"')
 
     def post_invalid_input(self):
@@ -76,7 +88,7 @@ class ListViewTest(TestCase):
 
     def test_for_invalid_input_nothing_saved_to_db(self):
         self.post_invalid_input()
-        self.assertEqual(Item.objects.count(), 0)
+        self.assertEqual(Item.objects.count(), 0)  # 6
 
     def test_for_invalid_input_renders_list_template(self):
         response = self.post_invalid_input()
@@ -85,7 +97,7 @@ class ListViewTest(TestCase):
 
     def test_for_invalid_input_passes_form_to_template(self):
         response = self.post_invalid_input()
-        self.assertIsInstance(response.context['form'], ExistingListItemForm)
+        self.assertIsInstance(response.context['form'], ExistingListItemForm)  # 7
 
     def test_for_invalid_input_shows_error_on_page(self):
         response = self.post_invalid_input()
