@@ -16,24 +16,36 @@ class ItemValidationTest(FunctionslTest):
         self.browser.get(self.live_server_url)
         self.get_item_input_box().send_keys(Keys.ENTER)
 
-        self.wait_for(lambda: self.assertEqual(
-            self.browser.find_element_by_css_selector('.has-error').text,
-            "你不能创建一个空待办事项"
+        self.wait_for(lambda: self.browser.find_element_by_css_selector(
+            '#id_text:invalid'
         ))
 
+        # self.wait_for(lambda: self.assertEqual(
+        #     self.browser.find_element_by_css_selector('.has-error').text,
+        #     "你不能创建一个空待办事项"
+        # ))
+
         self.get_item_input_box().send_keys('购买牛奶')
+        self.wait_for(lambda: self.browser.find_element_by_css_selector(
+            '#id_text:valid'
+        ))
         self.get_item_input_box().send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table("1: 购买牛奶")
 
         self.get_item_input_box().send_keys(Keys.ENTER)
-        self.wait_for(lambda: self.assertEqual(
-            self.browser.find_element_by_css_selector('.has-error').text,
-            "你不能创建一个空待办事项"
+        self.wait_for(lambda: self.browser.find_element_by_css_selector(
+            '#id_text:invalid'
         ))
+        # self.wait_for(lambda: self.assertEqual(
+        #     self.browser.find_element_by_css_selector('.has-error').text,
+        #     "你不能创建一个空待办事项"
+        # ))
 
         self.get_item_input_box().send_keys('制作奶茶')
+        self.wait_for(lambda: self.browser.find_element_by_css_selector(
+            '#id_text:valid'
+        ))
         self.get_item_input_box().send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table("1: 购买牛奶")
         self.wait_for_row_in_list_table("2: 制作奶茶")
 
-        self.fail('finish this test!')
