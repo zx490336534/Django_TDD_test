@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Javascript tests</title>
+    <link rel="stylesheet" href="qunit-2.0.1.css">
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">
+    <form>
+        <input type="text">
+        <div class="has-error">错误信息</div>
+    </form>
+</div>
+
+
+<script src="../jquery.min.js"></script>
+<script src="qunit-2.0.1.js"></script>
+<script>
+    QUnit.test("冒烟测试", function (assert) {
+        assert.equal($('.has-error').is(':visible'), true);
+        $('.has-error').hide();
+        assert.equal($('.has-error').is(':visible'), false)
+    });
+    QUnit.test("冒烟测试2", function (assert) {
+        assert.equal($('.has-error').is(':visible'), true);
+        $('.has-error').hide();
+        assert.equal($('.has-error').is(':visible'), false)
+    });
+</script>
+</body>
+</html>
